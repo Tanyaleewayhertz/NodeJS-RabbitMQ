@@ -55,20 +55,20 @@ const receiveMessages = async () => {
     await channel.assertExchange(exchangeName, 'fanout', { durable: false });
  
     // Create a queue and bind it to the exchange
-    const queue = await channel.assertQueue('', { exclusive: true });
+    const queue = await channel.assertQueue('', { exclusive: true });  //temporary queue for a particular connection
     console.log(`[x] Waiting for messages in queue: ${queue.queue}`);
-    channel.bindQueue(queue.queue, exchangeName, '');
+    channel.bindQueue(queue.queue, exchangeName, '');  //queue k exchange se bind krna 
  
     // Consume messages
-    channel.consume(queue.queue, (msg) => {
-      if (msg.content) {
+    channel.consume(queue.queue, (msg) => {  //queue se messages consume krna 
+      if (msg.content) {  //ye message ka content hai jo producer ne bheja tha
         console.log(`[x] Receiver1 received: ${msg.content.toString()}`);
       }
-    }, { noAck: true });
+    }, { noAck: true });  //rabbitmq ko acknowledgement bhejne ki zrurt nhi hai 
   } catch (error) {
     console.error('Error:', error);
   }
 };
  
-receiveMessages();
+receiveMessages();  //message recieve krne ke liye ready hona
  
